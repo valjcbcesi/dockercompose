@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # 1. Le service MySQL
+  # MySQL
   db:
     image: mysql:8.0
     container_name: mysql_server
@@ -13,31 +13,27 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
-  # 2. Le service PHP
+  # PHP
   php:
     build:
       context: ./php
     container_name: php_fpm_server
     volumes:
-      # On monte le code source dans le conteneur PHP
       - ./src:/var/www/html
     depends_on:
       - db
 
-  # 3. Le service Apache
+  # Apache
   apache:
     image: httpd:2.4
     container_name: apache_web_server
     ports:
       - "8080:80"
     volumes:
-      # On monte le code source pour qu'Apache puisse le lire
       - ./src:/usr/local/apache2/htdocs/
-      # On remplace la configuration par défaut par notre vhost personnalisé
       - ./apache/my-vhost.conf:/usr/local/apache2/conf/httpd.conf
     depends_on:
       - php
 
-# Déclaration du volume persistant pour la base de données
 volumes:
   db_data:
