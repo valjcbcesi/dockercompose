@@ -19,7 +19,8 @@ services:
       context: ./php
     container_name: php_fpm_server
     volumes:
-      - ./src:/var/www/html
+      # CORRECTION ICI : On utilise le même chemin interne qu'Apache
+      - ./src:/usr/local/apache2/htdocs/
     depends_on:
       - db
 
